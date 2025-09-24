@@ -1,3 +1,6 @@
+
+const mongoose = require('mongoose');
+
 // ------------------ Sessions ------------------
 const sessionSchema = new mongoose.Schema({
   controlled_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },  // FK → Users
