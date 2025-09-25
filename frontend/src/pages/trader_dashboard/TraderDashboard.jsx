@@ -2,7 +2,6 @@ import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaUserCircle } from 'react-icons/fa';
-import './TraderDashboardNavbar.css';
 
 const TraderDashboardNavbar = () => {
   const { user } = useAuth();

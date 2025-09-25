@@ -1,5 +1,5 @@
 // repositories/portfolioRepository.js
-const Portfolio = require('../models/PortFolio');
+const Portfolio = require('../models/Portfolio');
 
 class PortfolioRepository {
     async createPortfolio(portfolioData) {

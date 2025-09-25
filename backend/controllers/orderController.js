@@ -3,8 +3,15 @@ const orderRepo = require('../repository/orderRepository');
 
 exports.createOrder = async (req, res) => {
   try {
-    const orderData = { ...req.body, buyer_id: req.user.id }; // assume req.user is set by auth middleware
+    // Use buyer_id from req.user if middleware is set, else fallback to body
+    const buyer_id = req.user?.id || req.body.buyer_id;
+    if (!buyer_id) {
+      return res.status(400).json({ error: 'buyer_id is required' });
+    }
+
+    const orderData = { ...req.body, buyer_id };
     const order = await orderRepo.createOrder(orderData);
+
     res.status(201).json(order);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -13,7 +20,9 @@ exports.createOrder = async (req, res) => {
 
 exports.getOrders = async (req, res) => {
   try {
-    const orders = await orderRepo.getOrdersByUser(req.user.id);
+    const userId = req.params.id; 
+    console.log('User ID from req.user:', userId);
+    const orders = await orderRepo.getOrdersByUser(userId);
     res.json(orders);
   } catch (err) {
     res.status(500).json({ error: err.message });

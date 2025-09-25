@@ -15,6 +15,10 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/stocks', require('./routes/stockRoute'));
+app.use('/api/portfolio', require('./routes/portfolioRoutes'));
+app.use('/api/order', require('./routes/orderRoute'));
+app.use('/api/transaction', require('./routes/transactionRoutes'));
+
 
 // image upload path
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

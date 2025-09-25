@@ -1,0 +1,121 @@
+.tile-icon {
+  margin-bottom: 0.3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.buyer-wallet-dashboard {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  padding: 2rem;
+}
+.wallet-tiles {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  flex: 2;
+  align-items: stretch;
+}
+ .wallet-tile {
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(120,120,140,0.13), 0 1.5px 4px rgba(120,120,140,0.09);
+  padding: 1.2rem 2rem;
+  min-width: 180px;
+  text-align: center;
+  border: 1.5px solid #2563eb33;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.wallet-tile:hover {
+  box-shadow: 0 8px 24px rgba(120,120,140,0.18), 0 2px 8px rgba(120,120,140,0.13);
+  border-color: #2563eb88;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.tile-label {
+  font-size: 1.05em;
+  color: #6e6e6e;
+  font-weight: 600;
+  margin-bottom: 0.18em;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tile-value {
+  font-size: 1.55em;
+  font-weight: 700;
+  color: #292929;
+  text-shadow: 0 1px 2px #e0e7ff;
+}
+.update-wallet-form-wrapper {
+  flex: 1;
+  min-width: 320px;
+}
+.update-wallet-form {
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  padding: 1.2rem 2rem;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+  /* Flex row for input and button in wallet form */
+  .wallet-form-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 48px;
+  }
+.update-wallet-form h3 {
+  color: #2563eb;
+  font-size: 1.2em;
+  margin-bottom: 1em;
+  font-weight: bold;
+}
+.update-input {
+  width: 100%;
+  padding: 0.5em 0.7em;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1em;
+  margin-bottom: 0;
+  margin-right: 0.5em;
+  box-sizing: border-box;
+  height: 38px;
+}
+.update-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 0.5em;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+.update-btn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+.error {
+  color: #dc2626;
+  margin-top: 1em;
+}
