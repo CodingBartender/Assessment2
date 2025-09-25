@@ -1,8 +1,17 @@
 // repositories/orderRepository.js
 const Order = require('../models/Order');
 const portfolioRepo = require('../repository/portfolioRepositry');
+const mongoose = require('mongoose');
 
 class OrderRepository {
+    // Get total order quantity for a buyer
+    async getTotalOrderQuantityByBuyer(buyerId) {
+        const result = await Order.aggregate([
+            { $match: { buyer_id: typeof buyerId === 'string' ? new require('mongoose').Types.ObjectId(buyerId) : buyerId } },
+            { $group: { _id: null, totalQuantity: { $sum: "$quantity" } } }
+        ]);
+        return result[0]?.totalQuantity || 0;
+    }
     async createOrder(orderData) {
         const { portfolio_id, price, quantity } = orderData;
         const orderAmount = price * quantity;
@@ -55,7 +64,9 @@ class OrderRepository {
     }
 
     async deleteOrder(orderId, userId) {
-        return await Order.findOneAndDelete({ _id: orderId, buyer_id: userId });
+        console.log("orderId:", orderId, "userId:", userId);
+
+        return await Order.findByIdAndDelete(orderId)
     }
 }
 

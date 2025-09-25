@@ -1,3 +1,15 @@
+exports.getTotalOrderQuantityByBuyer = async (req, res) => {
+  try {
+    const buyerId = req.params.buyerId || req.query.buyer_id;
+    if (!buyerId) {
+      return res.status(400).json({ error: 'buyer_id is required' });
+    }
+    const totalQuantity = await orderRepo.getTotalOrderQuantityByBuyer(buyerId);
+    res.json({ buyer_id: buyerId, totalQuantity });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 // controllers/orderController.js
 const orderRepo = require('../repository/orderRepository');
 
@@ -51,7 +63,7 @@ exports.updateOrder = async (req, res) => {
 
 exports.deleteOrder = async (req, res) => {
   try {
-    const order = await orderRepo.deleteOrder(req.params.id, req.user.id);
+    const order = await orderRepo.deleteOrder(req.params.id, req.body.user_id);
     if (!order) return res.status(404).json({ error: 'Order not found or not yours' });
     res.json({ message: 'Order deleted successfully' });
   } catch (err) {

@@ -19,7 +19,7 @@ const BuyerWallet = () => {
     try {
       // Get portfolio (assume only one per buyer)
       const userId = sessionStorage.getItem('user_id');
-      const resPortfolio = await axiosInstance.get(`/api/portfolio/getAllByUserId`,{
+      const resPortfolio = await axiosInstance.get(`/api/portfolio/getAllByUserId`, {
         params: { user_id: userId }
       });
       const portfolioData = resPortfolio.data[0] || resPortfolio.data;
@@ -27,10 +27,11 @@ const BuyerWallet = () => {
 
       // Get buy/sold stats and profit
       const buyerId = portfolioData?.buyer_id;
-      const resOrders = await axiosInstance.get(`/api/orders/buyer/${buyerId}/stats`);
-      setBuyCount(resOrders.data.buyCount || 0);
-      setSoldCount(resOrders.data.soldCount || 0);
-      setProfit(resOrders.data.totalProfit || 0);
+      const resOrders = await axiosInstance.get(`/api/order/totalQuantity/${buyerId}`);
+      console.log(resOrders)
+      setBuyCount(resOrders.data.totalQuantity || 0);
+      //setSoldCount(resOrders.data.soldCount || 0);
+      setProfit(resOrders.data.totalProfit || 100);
     } catch (err) {
       //setError('Failed to load wallet data');
     } finally {
@@ -39,7 +40,7 @@ const BuyerWallet = () => {
   };
 
   useEffect(() => {
-   fetchWalletData();
+    fetchWalletData();
   }, []);
 
   // Update wallet balance
@@ -63,10 +64,17 @@ const BuyerWallet = () => {
           virtual_balance: Number(updateAmount)
         });
       } else {
+        console.log("Updating existing portfolio:", portfolio);
+
+        if (updateAmount <= 0) {
+          setError("Amount must be positive");
+          setLoading(false);
+          return;
+        }
         // Portfolio exists, update
         await axiosInstance.put(`/api/portfolio/update/${portfolio._id}`, {
           user_id: userId,
-          virtual_balance: Number(updateAmount),
+          virtual_balance: Number(updateAmount) + Number(portfolio.virtual_balance)
         });
       }
       setUpdateAmount("");
@@ -105,7 +113,7 @@ const BuyerWallet = () => {
       </div>
       <div className="update-wallet-form-wrapper">
         <form className="update-wallet-form" onSubmit={handleUpdate}>
-          <h3><FaMoneyBillWave size={22} color="#048c31" style={{marginRight: 8}} />Update Wallet Balance</h3>
+          <h3><FaMoneyBillWave size={22} color="#048c31" style={{ marginRight: 8 }} />Update Wallet Balance</h3>
           <div className="wallet-form-row">
             <input
               type="number"
