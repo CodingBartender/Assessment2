@@ -14,6 +14,12 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
+// add orderState routes
+const orderStateRoutes = require('./routes/orderStateRoutes');
+app.use('/api/orders', orderStateRoutes);
+
+
+
 // Export the app object for testing
 if (require.main === module) {
     connectDB();
