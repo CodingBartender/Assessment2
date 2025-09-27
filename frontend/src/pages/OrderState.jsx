@@ -26,12 +26,7 @@ const OrderState = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <OrderStateForm
-        orders={orders}
-        setOrders={setOrders}
-        editingOrder={editingOrder}
-        setEditingOrder={setEditingOrder}
-      />
+
       <OrderStateList
         orders={orders}
         setOrders={setOrders}
