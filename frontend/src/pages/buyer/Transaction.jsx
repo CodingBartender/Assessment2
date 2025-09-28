@@ -1,6 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import axiosInstance from '../../axiosConfig';
 
+// ----------- OOP: User (superclass) and Buyer (singleton subclass) -----------
+class User {
+    constructor(userId) {
+        this.userId = userId;
+    }
+    // Abstraction: fetchTransactions is defined but not implemented
+    async fetchTransactions() {
+        throw new Error('fetchTransactions() must be implemented by subclass');
+    }
+}
+
+class Buyer extends User {
+    constructor(userId) {
+        super(userId);
+        if (Buyer._instance) {
+            return Buyer._instance;
+        }
+        Buyer._instance = this;
+    }
+    // Encapsulation: fetch logic is inside the class
+    async fetchTransactions() {
+        if (!this.userId) return [];
+        try {
+            const res = await axiosInstance.get(`/api/transaction/buyer/${this.userId}`);
+            return res.data;
+        } catch {
+            return [];
+        }
+    }
+    // Static method to get the singleton instance
+    static getInstance() {
+        const userId = sessionStorage.getItem('user_id');
+        if (!Buyer._instance) {
+            Buyer._instance = new Buyer(userId);
+        } else if (Buyer._instance.userId !== userId) {
+            // Update userId if session changes
+            Buyer._instance.userId = userId;
+        }
+        return Buyer._instance;
+    }
+}
+
+
+// Polymorphism: could add more user types with different fetchTransactions
 const typeStrategies = {
     BUY: {
         bg: '#f0fdf4',
@@ -39,25 +83,22 @@ function TypeChip({ type }) {
     );
 }
 
+
 const Transaction = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchTransactions = async () => {
+        const fetch = async () => {
             setLoading(true);
-            const userId = sessionStorage.getItem('user_id');
-            if (!userId) return;
-            try {
-                const res = await axiosInstance.get(`/api/transaction/buyer/${userId}`);
-                setTransactions(res.data);
-            } catch {
-                setTransactions([]);
-            } finally {
-                setLoading(false);
-            }
+            // Singleton Buyer instance
+            const buyer = Buyer.getInstance();
+            // Polymorphism: could use User or Buyer
+            const txs = await buyer.fetchTransactions();
+            setTransactions(txs);
+            setLoading(false);
         };
-        fetchTransactions();
+        fetch();
     }, []);
 
     return (
