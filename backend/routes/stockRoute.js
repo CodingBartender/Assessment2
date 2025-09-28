@@ -24,4 +24,5 @@ router.delete('/delete/:id', stockController.deleteStock); // delete stock
 router.get('/stocks/:id/orders/count', stockController.getOrderCount);  // total orders
 router.get('/stocks/:id/orders', stockController.getOrdersForStock);   // all orders for stock
 
+
 module.exports = router;

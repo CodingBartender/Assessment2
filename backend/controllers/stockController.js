@@ -1,6 +1,5 @@
 // controllers/stockController.js
 const stockRepo = require('../repository/stockRepository');
-
 const fs = require('fs');
 const path = require('path');
 
@@ -49,8 +48,6 @@ exports.updateStock = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
-
-
 
 exports.deleteStock = async (req, res) => {
   try {

@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-
-// ------------------ Transactions ------------------
 const transactionSchema = new mongoose.Schema({
   order_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },       // FK → Orders
   buyer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },        // FK → Users
