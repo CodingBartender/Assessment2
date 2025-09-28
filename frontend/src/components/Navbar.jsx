@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../images/stock_logo_final.png';  
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -11,10 +12,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="text-black p-3 flex justify-between items-center">
+    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
       <Link to="/" className="text-2xl font-bold">Stock Market Simulation</Link>
-      <p> <img src = "stock_logo_final.png" alt = "Logo" width = "100" height = "100" className = "" /> </p>
-      <div>
+      {/*<p> <img src ={logo} alt = "Logo" width = "100" height = "100" className = "" /> </p> */}
+      <div className="flex items-center">
         {user ? (
           <>
             <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
