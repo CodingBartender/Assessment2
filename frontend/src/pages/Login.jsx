@@ -12,8 +12,17 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post('/api/auth/login', formData);
-      login(response.data);
-      navigate('/tasks');
+      // Ensure role is present in user object
+      const userData = { ...response.data };
+      if (!userData.role && userData.type) {
+        userData.role = userData.type;
+      }
+      login(userData);
+      if (userData.role === 'TRADER') {
+        navigate('/trader-dashboard');
+      } else {
+        navigate('/profile');
+      }
     } catch (error) {
       alert('Login failed. Please try again.');
     }
