@@ -1,0 +1,45 @@
+.trader-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2563eb;
+  padding: 1rem 2rem;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+.nav-left {
+  display: flex;
+  gap: 2rem;
+}
+.nav-link {
+  color: #fff;
+  font-weight: 500;
+  font-size: 1.1rem;
+  text-decoration: none;
+  padding: 0.3em 0.7em;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+.nav-link:hover {
+  background: #1e40af;
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+.user-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+.avatar {
+  display: flex;
+  align-items: center;
+}
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}

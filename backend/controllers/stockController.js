@@ -1,9 +1,15 @@
 // controllers/stockController.js
 const stockRepo = require('../repository/stockRepository');
+const fs = require('fs');
+const path = require('path');
 
 exports.createStock = async (req, res) => {
   try {
-    const stock = await stockRepo.createStock(req.body);
+    let stockData = req.body;
+    if (req.file) {
+      stockData.logo = `/uploads/${req.file.filename}`;
+    }
+    const stock = await stockRepo.createStock(stockData);
     res.status(201).json(stock);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -31,7 +37,11 @@ exports.getStockById = async (req, res) => {
 
 exports.updateStock = async (req, res) => {
   try {
-    const stock = await stockRepo.updateStock(req.params.id, req.body);
+    let updateData = req.body;
+    if (req.file) {
+      updateData.logo = `/uploads/${req.file.filename}`;
+    }
+    const stock = await stockRepo.updateStock(req.params.id, updateData);
     if (!stock) return res.status(404).json({ error: 'Stock not found' });
     res.json(stock);
   } catch (err) {
@@ -41,8 +51,20 @@ exports.updateStock = async (req, res) => {
 
 exports.deleteStock = async (req, res) => {
   try {
-    const stock = await stockRepo.deleteStock(req.params.id);
+    // Find stock first to get logo path
+    const stock = await stockRepo.getStockById(req.params.id);
     if (!stock) return res.status(404).json({ error: 'Stock not found' });
+
+    // Delete image file if exists
+    if (stock.logo) {
+      const logoPath = path.join(__dirname, '../', stock.logo);
+      console.log("Deleting file at path: ", logoPath);
+      fs.unlink(logoPath, err => {
+        // Ignore error if file doesn't exist
+      });
+    }
+
+    await stockRepo.deleteStock(req.params.id);
     res.json({ message: 'Stock deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });

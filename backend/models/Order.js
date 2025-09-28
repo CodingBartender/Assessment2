@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 // ------------------ Orders ------------------
 const orderSchema = new mongoose.Schema({
   buyer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },       // FK → Users
@@ -11,3 +13,4 @@ const orderSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Order', orderSchema);
+
