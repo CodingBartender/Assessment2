@@ -43,7 +43,7 @@ const OrderStateForm = ({ orders, setOrders, editingOrder, setEditingOrder }) =>
       <h1 className="text-2xl font-bold mb-4">Place New Order</h1>
       <input
         type="text"
-        placeholder="Stock Name (e.g., AAPL)"
+        placeholder="Stock Name"
         value={formData.stockName}
         onChange={(e) => setFormData({ ...formData, stockName: e.target.value })}
         className="w-full mb-4 p-2 border rounded"
