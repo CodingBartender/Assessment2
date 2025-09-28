@@ -7,8 +7,9 @@ import Tasks from './pages/Tasks';
 import ViewStock from './pages/MarketView';
 import TraderDashboard from './pages/trader_dashboard/TraderDashboard';
 import Stock from './pages/trader_dashboard/TraderStock';
-import Transaction from './pages/trader_dashboard/TraderTransactions';
-
+import TrradeHistory from './pages/trader_dashboard/TraderTransactions';
+import Portfolio from './pages/buyer/Portfolio';
+import Transaction from './pages/buyer/Transaction';
 
 function App() {
   return (
@@ -22,7 +23,9 @@ function App() {
         <Route path="/marketview" element={<ViewStock />} />
         <Route path="/trader-dashboard" element={<TraderDashboard />} />
         <Route path="/trader-dashboard/stock" element={<Stock />} />
-        <Route path="/trader-dashboard/transactions" element={<Transaction />} />
+        <Route path="/trader-dashboard/transactions" element={<TrradeHistory />} />
+        <Route path="/buyer/portfolio" element={<Portfolio />} />
+        <Route path="/buyer/transactions" element={<Transaction />} />
       </Routes>
     </Router>
   );

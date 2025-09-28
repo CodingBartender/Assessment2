@@ -30,8 +30,8 @@ const Navbar = () => {
               <>
                 <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
                 <Link to="/marketview" className="font-bold mr-4">Market View</Link>
-                <Link to="/portfolio" className="font-bold mr-4">Portfolio</Link>
-                <Link to="/transactions" className="font-bold mr-4">Transactions</Link>
+                <Link to="/buyer/portfolio" className="font-bold mr-4">Portfolio</Link>
+                <Link to="/buyer/transactions" className="font-bold mr-4">Transactions</Link>
               </>
             )}
             {/* Profile always on right */}
