@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import logo from '../images/stock_logo_final.png';  
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -11,15 +12,30 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="text-black p-3 flex justify-between items-center">
+    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
       <Link to="/" className="text-2xl font-bold">Stock Market Simulation</Link>
-      <p> <img src = "stock_logo_final.png" alt = "Logo" width = "100" height = "100" className = "" /> </p>
-      <div>
+      {/*<p> <img src ={logo} alt = "Logo" width = "100" height = "100" className = "" /> </p> */}
+      <div className="flex items-center">
         {user ? (
           <>
-            <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
-            <Link to="/marketview" className="font-bold mr-4">Market View</Link>
-            <Link to="/profile" className="mr-4">Profile</Link>
+            {/* Trader: show Stock and Transaction */}
+            {user.role === 'TRADER' && (
+              <>
+                <Link to="/trader-dashboard/stock" className="font-bold mr-4">Stock</Link>
+                <Link to="/trader-dashboard/transactions" className="font-bold mr-4">Transaction</Link>
+              </>
+            )}
+            {/* Buyer: show older links */}
+            {user.role === 'BUYER' && (
+              <>
+                <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
+                <Link to="/marketview" className="font-bold mr-4">Market View</Link>
+                <Link to="/buyer/portfolio" className="font-bold mr-4">Portfolio</Link>
+                <Link to="/buyer/transactions" className="font-bold mr-4">Transactions</Link>
+              </>
+            )}
+            {/* Profile always on right */}
+            <Link to="/profile" className=" font-bold mr-4">Profile</Link>
             <button
               onClick={handleLogout}
               className="px-4 py-2 rounded hover:bg-red-700"
