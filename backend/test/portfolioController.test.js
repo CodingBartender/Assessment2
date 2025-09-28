@@ -1,4 +1,6 @@
 // backend/test/portfolioController.test.js
+
+// ---------------- Portfolio Controller Unit Tests ----------------
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const sinon = require('sinon');
@@ -35,8 +37,9 @@ describe('Portfolio Controller', () => {
     sandbox.restore();
   });
 
+  // ----------- Create Portfolio Tests -----------
   describe('createPortfolio', () => {
-    it('should create a portfolio and return 201', (done) => {
+  it('should create a new portfolio successfully', (done) => {
       const mockPortfolio = { _id: '1', buyer_id: 'mockUserId', virtual_balance: 1000 };
       sandbox.stub(portfolioRepo, 'createPortfolio').resolves(mockPortfolio);
       chai.request(app)
@@ -48,7 +51,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 400 if buyer_id is missing', (done) => {
+  it('should return 400 if buyer_id is missing', (done) => {
       // No req.user and no user_id in body
       const appNoUser = express();
       appNoUser.use(bodyParser.json());
@@ -64,8 +67,9 @@ describe('Portfolio Controller', () => {
     });
   });
 
+  // ----------- Get Portfolios Tests -----------
   describe('getPortfolios', () => {
-    it('should return portfolios for a user', (done) => {
+  it('should return portfolios for a user', (done) => {
       const mockPortfolios = [{ _id: '1', buyer_id: 'mockUserId' }];
       sandbox.stub(portfolioRepo, 'getPortfoliosByUser').resolves(mockPortfolios);
       chai.request(app)
@@ -76,7 +80,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 400 if user_id is missing', (done) => {
+  it('should return 400 if user_id is missing', (done) => {
       const appNoUser = express();
       appNoUser.use(bodyParser.json());
       appNoUser.get('/portfolio', portfolioController.getPortfolios);
@@ -90,8 +94,9 @@ describe('Portfolio Controller', () => {
     });
   });
 
+  // ----------- Get Portfolio By ID Tests -----------
   describe('getPortfolioById', () => {
-    it('should return a portfolio by id', (done) => {
+  it('should return a portfolio by id', (done) => {
       const mockPortfolio = { _id: '1', buyer_id: 'mockUserId' };
       sandbox.stub(portfolioRepo, 'getPortfolioById').resolves(mockPortfolio);
       chai.request(app)
@@ -102,7 +107,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 404 if not found', (done) => {
+  it('should return 404 if portfolio is not found', (done) => {
       sandbox.stub(portfolioRepo, 'getPortfolioById').resolves(null);
       chai.request(app)
         .get('/portfolio/2')
@@ -114,8 +119,9 @@ describe('Portfolio Controller', () => {
     });
   });
 
+  // ----------- Update Portfolio Tests -----------
   describe('updatePortfolio', () => {
-    it('should update a portfolio', (done) => {
+  it('should update a portfolio successfully', (done) => {
       const updated = { _id: '1', buyer_id: 'mockUserId', virtual_balance: 2000 };
       sandbox.stub(portfolioRepo, 'updatePortfolio').resolves(updated);
       chai.request(app)
@@ -127,7 +133,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 404 if not found', (done) => {
+  it('should return 404 if portfolio is not found', (done) => {
       sandbox.stub(portfolioRepo, 'updatePortfolio').resolves(null);
       chai.request(app)
         .put('/portfolio/2')
@@ -138,7 +144,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 400 if buyer_id is missing', (done) => {
+  it('should return 400 if buyer_id is missing', (done) => {
       const appNoUser = express();
       appNoUser.use(bodyParser.json());
       appNoUser.put('/portfolio/:id', portfolioController.updatePortfolio);
@@ -153,8 +159,9 @@ describe('Portfolio Controller', () => {
     });
   });
 
+  // ----------- Delete Portfolio Tests -----------
   describe('deletePortfolio', () => {
-    it('should delete a portfolio', (done) => {
+  it('should delete a portfolio successfully', (done) => {
       sandbox.stub(portfolioRepo, 'deletePortfolio').resolves({});
       chai.request(app)
         .delete('/portfolio/1')
@@ -164,7 +171,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 404 if not found', (done) => {
+  it('should return 404 if portfolio is not found', (done) => {
       sandbox.stub(portfolioRepo, 'deletePortfolio').resolves(null);
       chai.request(app)
         .delete('/portfolio/2')
@@ -174,7 +181,7 @@ describe('Portfolio Controller', () => {
           done();
         });
     });
-    it('should return 400 if user_id is missing', (done) => {
+  it('should return 400 if user_id is missing', (done) => {
       const appNoUser = express();
       appNoUser.use(bodyParser.json());
       appNoUser.delete('/portfolio/:id', portfolioController.deletePortfolio);

@@ -1,3 +1,6 @@
+// backend/test/stockController.test.js
+
+// ---------------- Stock Controller Unit Tests ----------------
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const sinon = require('sinon');
@@ -32,8 +35,9 @@ describe('Stock Controller', () => {
     sandbox.restore();
   });
 
+  // ----------- Create Stock Tests -----------
   describe('createStock', () => {
-    it('should create a stock and return 201', (done) => {
+  it('should create a new stock successfully', (done) => {
       const mockStock = { _id: '1', symbol: 'AAPL', company_name: 'Apple', current_price: 100, quantity: 10, type: 'EQUITY' };
       sandbox.stub(stockRepo, 'createStock').resolves(mockStock);
       chai.request(app)
@@ -45,7 +49,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 400 on error', (done) => {
+  it('should return 400 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'createStock').rejects(new Error('Create error'));
       chai.request(app)
         .post('/addStock')
@@ -58,8 +62,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Get All Stocks Tests -----------
   describe('getAllStocks', () => {
-    it('should return all stocks', (done) => {
+  it('should return all stocks', (done) => {
       const mockStocks = [{ _id: '1', symbol: 'AAPL' }];
       sandbox.stub(stockRepo, 'getAllStocks').resolves(mockStocks);
       chai.request(app)
@@ -70,7 +75,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 500 on error', (done) => {
+  it('should return 500 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'getAllStocks').rejects(new Error('DB error'));
       chai.request(app)
         .get('/getAllStocks')
@@ -82,8 +87,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Get Stock By ID Tests -----------
   describe('getStockById', () => {
-    it('should return a stock by id', (done) => {
+  it('should return a stock by id', (done) => {
       const mockStock = { _id: '1', symbol: 'AAPL' };
       sandbox.stub(stockRepo, 'getStockById').resolves(mockStock);
       chai.request(app)
@@ -94,7 +100,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 404 if not found', (done) => {
+  it('should return 404 if stock is not found', (done) => {
       sandbox.stub(stockRepo, 'getStockById').resolves(null);
       chai.request(app)
         .get('/stocks/2')
@@ -104,7 +110,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 500 on error', (done) => {
+  it('should return 500 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'getStockById').rejects(new Error('DB error'));
       chai.request(app)
         .get('/stocks/3')
@@ -116,8 +122,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Update Stock Tests -----------
   describe('updateStock', () => {
-    it('should update a stock', (done) => {
+  it('should update a stock successfully', (done) => {
       const updated = { _id: '1', symbol: 'AAPL', current_price: 200 };
       sandbox.stub(stockRepo, 'updateStock').resolves(updated);
       chai.request(app)
@@ -129,7 +136,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 404 if not found', (done) => {
+  it('should return 404 if stock is not found', (done) => {
       sandbox.stub(stockRepo, 'updateStock').resolves(null);
       chai.request(app)
         .put('/updateStock/2')
@@ -140,7 +147,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 400 on error', (done) => {
+  it('should return 400 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'updateStock').rejects(new Error('Update error'));
       chai.request(app)
         .put('/updateStock/3')
@@ -153,8 +160,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Delete Stock Tests -----------
   describe('deleteStock', () => {
-    it('should delete a stock and return success', (done) => {
+  it('should delete a stock successfully', (done) => {
       const mockStock = { _id: '1', logo: null };
       sandbox.stub(stockRepo, 'getStockById').resolves(mockStock);
       sandbox.stub(stockRepo, 'deleteStock').resolves();
@@ -167,7 +175,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 404 if stock not found', (done) => {
+  it('should return 404 if stock is not found', (done) => {
       sandbox.stub(stockRepo, 'getStockById').resolves(null);
       chai.request(app)
         .delete('/delete/2')
@@ -177,7 +185,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 500 on error', (done) => {
+  it('should return 500 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'getStockById').rejects(new Error('DB error'));
       chai.request(app)
         .delete('/delete/3')
@@ -189,8 +197,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Get Order Count Tests -----------
   describe('getOrderCount', () => {
-    it('should return order count for a stock', (done) => {
+  it('should return order count for a stock', (done) => {
       sandbox.stub(stockRepo, 'getOrderCount').resolves(5);
       chai.request(app)
         .get('/stocks/1/orders/count')
@@ -200,7 +209,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 500 on error', (done) => {
+  it('should return 500 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'getOrderCount').rejects(new Error('DB error'));
       chai.request(app)
         .get('/stocks/1/orders/count')
@@ -212,8 +221,9 @@ describe('Stock Controller', () => {
     });
   });
 
+  // ----------- Get Orders For Stock Tests -----------
   describe('getOrdersForStock', () => {
-    it('should return orders for a stock', (done) => {
+  it('should return orders for a stock', (done) => {
       const mockOrders = [{ _id: 'order1' }, { _id: 'order2' }];
       sandbox.stub(stockRepo, 'getOrdersForStock').resolves(mockOrders);
       chai.request(app)
@@ -224,7 +234,7 @@ describe('Stock Controller', () => {
           done();
         });
     });
-    it('should return 500 on error', (done) => {
+  it('should return 500 if an error occurs', (done) => {
       sandbox.stub(stockRepo, 'getOrdersForStock').rejects(new Error('DB error'));
       chai.request(app)
         .get('/stocks/1/orders')
