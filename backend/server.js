@@ -23,12 +23,6 @@ app.use('/api/transaction', require('./routes/transactionRoutes'));
 // image upload path
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// add orderState routes
-const orderStateRoutes = require('./routes/orderStateRoutes');
-app.use('/api/orderstate', orderStateRoutes);
-
-
-
 // Export the app object for testing
 if (require.main === module) {
     connectDB();
