@@ -18,11 +18,24 @@ const Navbar = () => {
       <div className="flex items-center">
         {user ? (
           <>
-            <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
-            <Link to="/marketview" className="font-bold mr-4">Market View</Link>
-            <Link to="/profile" className="mr-4">Profile</Link>
-            <Link to="/orderstate" className="font-bold mr-4">OrderState</Link>
-
+            {/* Trader: show Stock and Transaction */}
+            {user.role === 'TRADER' && (
+              <>
+                <Link to="/trader-dashboard/stock" className="font-bold mr-4">Stock</Link>
+                <Link to="/trader-dashboard/transactions" className="font-bold mr-4">Transaction</Link>
+              </>
+            )}
+            {/* Buyer: show older links */}
+            {user.role === 'BUYER' && (
+              <>
+                <Link to="/tasks" className="font-bold mr-4">Stocks</Link>
+                <Link to="/marketview" className="font-bold mr-4">Market View</Link>
+                <Link to="/buyer/portfolio" className="font-bold mr-4">Portfolio</Link>
+                <Link to="/buyer/transactions" className="font-bold mr-4">Transactions</Link>
+              </>
+            )}
+            {/* Profile always on right */}
+            <Link to="/profile" className=" font-bold mr-4">Profile</Link>
             <button
               onClick={handleLogout}
               className="px-4 py-2 rounded hover:bg-red-700"
