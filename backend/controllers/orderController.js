@@ -21,6 +21,9 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: 'buyer_id is required' });
     }
 
+
+
+    /* replace with commands -> instead of calling repository directly*/
     const orderData = { ...req.body, buyer_id };
     const order = await orderRepo.createOrder(orderData);
 
@@ -29,6 +32,11 @@ exports.createOrder = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+
+
+
+
 
 exports.getOrders = async (req, res) => {
   try {
