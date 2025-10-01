@@ -283,4 +283,34 @@ const ViewStock = () => {
               <ul className="space-y-3">
                 {orders.map((o) => (
                   <li key={o._id} className="border rounded p-3">
-      
+                    <div className="flex justify-between">
+                      <div className="font-medium">
+                        {o.order_type} × {o.quantity}
+                      </div>
+                      <div>$ {(Number(o.price) || 0).toFixed(2)}</div>
+                    </div>
+                    <div className="text-xs opacity-70">
+                      Status: {o.status} • Placed:{' '}
+                      {o.created_at
+                        ? new Date(o.created_at).toLocaleString()
+                        : '—'}
+                    </div>
+                    {o.buyer_id?.name && (
+                      <div className="text-xs opacity-70 mt-1">
+                        Buyer: {o.buyer_id.name}
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <div className="opacity-60">No orders for this stock yet.</div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ViewStock;

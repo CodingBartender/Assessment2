@@ -82,4 +82,29 @@ exports.deleteStock = async (req, res) => {
     await stockRepo.deleteStock(req.params.id);
 
     //broadcast removal
-    EventHub.instance.emit('stock.deleted', { _id: req
+    EventHub.instance.emit('stock.deleted', { _id: req.params.id, symbol: existing.symbol });
+
+    res.json({ message: 'Stock deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// New methods for order statistics
+exports.getOrderCount = async (req, res) => {
+  try {
+    const count = await stockRepo.getOrderCount(req.params.id);
+    res.json({ stock_id: req.params.id, order_count: count });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+exports.getOrdersForStock = async (req, res) => {
+  try {
+    const orders = await stockRepo.getOrdersForStock(req.params.id);
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
