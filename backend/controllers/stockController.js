@@ -81,8 +81,8 @@ exports.deleteStock = async (req, res) => {
 
     await stockRepo.deleteStock(req.params.id);
 
-    //broadcast removal
-    EventHub.instance.emit('stock.deleted', { _id: req.params.id, symbol: existing.symbol });
+    // FR6: broadcast removal so SSE clients drop it
+    EventHub.instance.emit('stock.deleted', { _id: req.params.id, symbol: stock.symbol });
 
     res.json({ message: 'Stock deleted successfully' });
   } catch (err) {
