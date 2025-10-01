@@ -18,6 +18,7 @@ app.use('/api/stocks', require('./routes/stockRoute'));
 app.use('/api/portfolio', require('./routes/portfolioRoutes'));
 app.use('/api/order', require('./routes/orderRoute'));
 app.use('/api/transaction', require('./routes/transactionRoutes'));
+app.use('/api/market', require('./routes/marketFeedRoutes'));
 
 
 // image upload path

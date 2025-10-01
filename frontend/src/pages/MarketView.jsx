@@ -1,4 +1,3 @@
-// frontend/src/pages/MarketView.jsx
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
@@ -77,6 +76,38 @@ const ViewStock = () => {
     return () => {
       mounted = false;
     };
+  }, []);
+
+  // FR6: Live updates (SSE) — merge incoming stock updates into the list
+  useEffect(() => {
+    const url = `${window.location.origin.replace(/\/+$/, '')}/api/market/stream`;
+    const es = new EventSource(url);
+
+    const mergeUpdate = (payload) => {
+      setStocks((prev) => {
+        const map = new Map(prev.map((p) => [p._id || p.symbol, p]));
+        const key = payload._id || payload.symbol;
+        const old = map.get(key) || {};
+        map.set(key, { ...old, ...payload }); // merge price/qty/updated, etc.
+        return Array.from(map.values());
+      });
+    };
+
+    es.addEventListener('stock.updated', (ev) => {
+      try { mergeUpdate(JSON.parse(ev.data)); } catch {}
+    });
+
+    es.addEventListener('stock.deleted', (ev) => {
+      try {
+        const { _id, symbol } = JSON.parse(ev.data);
+        setStocks((prev) =>
+          prev.filter((s) => (s._id && _id) ? s._id !== _id : s.symbol !== symbol)
+        );
+      } catch {}
+    });
+
+    es.onerror = () => { /* keep alive; browser auto-retries */ };
+    return () => es.close();
   }, []);
 
   const filtered = useMemo(() => {
