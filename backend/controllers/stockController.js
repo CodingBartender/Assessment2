@@ -1,5 +1,6 @@
 // controllers/stockController.js
 const stockRepo = require('../repository/stockRepository');
+const EventHub = require('../observer/EventHub'); 
 const fs = require('fs');
 const path = require('path');
 
@@ -10,11 +11,18 @@ exports.createStock = async (req, res) => {
       stockData.logo = `/uploads/${req.file.filename}`;
     }
     const stock = await stockRepo.createStock(stockData);
+    //broadcast snapshot
+    EventHub.instance.emit('stock.updated', {
+      _id: stock._id, symbol: stock.symbol, company_name: stock.company_name,
+      current_price: stock.current_price, quantity: stock.quantity, last_updated: stock.last_updated,
+    });
+
     res.status(201).json(stock);
   } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
+    res.status(400).json({ error: err.message });}
 };
+
+
 
 exports.getAllStocks = async (req, res) => {
   try {
@@ -43,6 +51,13 @@ exports.updateStock = async (req, res) => {
     }
     const stock = await stockRepo.updateStock(req.params.id, updateData);
     if (!stock) return res.status(404).json({ error: 'Stock not found' });
+
+    //broadcast snapshot
+    EventHub.instance.emit('stock.updated', {
+      _id: stock._id, symbol: stock.symbol, company_name: stock.company_name,
+      current_price: stock.current_price, quantity: stock.quantity, last_updated: stock.last_updated,
+    });
+
     res.json(stock);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -65,6 +80,10 @@ exports.deleteStock = async (req, res) => {
     }
 
     await stockRepo.deleteStock(req.params.id);
+
+    //broadcast removal
+    EventHub.instance.emit('stock.deleted', { _id: req.params.id, symbol: existing.symbol });
+
     res.json({ message: 'Stock deleted successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
