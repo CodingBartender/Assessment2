@@ -12,7 +12,7 @@ class orderExecuteCommand extends command {
     async Execute() {
 
         const pending = new states.pendingState(this.order);
-        await pending.Validate;
+        await pending.Validate();
 
         const validate = new states.validatedState(this.order);
         await validate.Execute();
@@ -33,3 +33,5 @@ class orderExecuteCommand extends command {
 
     };
 };
+
+module.exports = orderExecuteCommand;

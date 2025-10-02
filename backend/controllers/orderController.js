@@ -1,3 +1,5 @@
+const executeCommand = require("../commands/orderExecutionCommand");
+
 exports.getTotalOrderQuantityByBuyer = async (req, res) => {
   try {
     const buyerId = req.params.buyerId || req.query.buyer_id;
@@ -21,22 +23,20 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ error: 'buyer_id is required' });
     }
 
+    
+    const orderData = { ...req.body, buyer_id, status: 'Pending' };
 
+    // const order = await orderRepo.createOrder(orderData);
 
-    /* replace with commands -> instead of calling repository directly*/
-    const orderData = { ...req.body, buyer_id };
-    const order = await orderRepo.createOrder(orderData);
+    // Added orderExecutionCommand
+    const orderCommand = new executeCommand(orderData);
+    const orderProcessed = await orderCommand.Execute();
 
-    res.status(201).json(order);
+    res.status(201).json(orderProcessed);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 };
-
-
-
-
-
 
 exports.getOrders = async (req, res) => {
   try {
