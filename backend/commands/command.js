@@ -8,7 +8,6 @@ class Command {
         throw new error('Undo() method must be used!')
     };
 
-
 };
 
 module.exports = Command;
