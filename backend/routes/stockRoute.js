@@ -18,11 +18,11 @@ const upload = multer({ storage });
 // CRUD
 router.post('/addStock', upload.single('logo'), stockController.createStock); // create stock with logo
 router.get('/getAllStocks', stockController.getAllStocks); // get all stocks
-router.get('/stocks/:id', stockController.getStockById); // get stock by id
+router.get('/:id', stockController.getStockById); // get stock by id
 router.put('/updateStock/:id', upload.single('logo'), stockController.updateStock); // update stock with logo
 router.delete('/delete/:id', stockController.deleteStock); // delete stock
-router.get('/stocks/:id/orders/count', stockController.getOrderCount);  // total orders
-router.get('/stocks/:id/orders', stockController.getOrdersForStock);   // all orders for stock
+router.get('/:id/orders/count', stockController.getOrderCount);  // total orders
+router.get('/:id/orders', stockController.getOrdersForStock);   // all orders for stock
 
 
 module.exports = router;

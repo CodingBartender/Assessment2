@@ -1,6 +1,7 @@
 // controllers/stockController.js
 const stockRepo = require('../repository/stockRepository');
 const EventHub = require('../observer/EventHub'); 
+const { getPricingStrategy } = require('../strategy/PricingStrategy');
 const fs = require('fs');
 const path = require('path');
 
@@ -10,7 +11,19 @@ exports.createStock = async (req, res) => {
     if (req.file) {
       stockData.logo = `/uploads/${req.file.filename}`;
     }
-    const stock = await stockRepo.createStock(stockData);
+    
+    const strategy = getPricingStrategy();
+    const nextPrice = strategy.compute({
+      current: Number(req.body.current_price),
+      signal: Number(req.body.current_price), // Trader’s intended price
+    });
+    const payload = {
+      ...req.body,
+      current_price: nextPrice,
+      last_updated: new Date(),
+    };
+    const stock = await stockRepo.createStock(payload);
+
     //broadcast snapshot
     EventHub.instance.emit('stock.updated', {
       _id: stock._id, symbol: stock.symbol, company_name: stock.company_name,
@@ -48,6 +61,20 @@ exports.updateStock = async (req, res) => {
     let updateData = req.body;
     if (req.file) {
       updateData.logo = `/uploads/${req.file.filename}`;
+    }
+    
+    const strategy = getPricingStrategy();
+    const changes = { ...req.body };
+
+    if (req.body.current_price !== undefined) {
+      // current = existing price, signal = requested price
+      const existing = await stockRepo.getStockById(req.params.id);
+      const nextPrice = strategy.compute({
+        current: Number(existing?.current_price),
+        signal: Number(req.body.current_price),
+      });
+      changes.current_price = nextPrice;
+      changes.last_updated = new Date();
     }
     const stock = await stockRepo.updateStock(req.params.id, updateData);
     if (!stock) return res.status(404).json({ error: 'Stock not found' });
