@@ -125,12 +125,13 @@ describe('Auth Controller', () => {
       sinon.stub(User, 'findById').resolves({
         name: 'User',
         email: 'user@example.com',
+        role: 'BUYER',
+        id: 'userId',
         university: 'Uni',
-        address: 'Addr',
       });
       await getProfile(req, res);
       expect(res.status.calledWith(200)).to.be.true;
-      expect(res.json.calledWithMatch({ name: 'User', email: 'user@example.com', university: 'Uni', address: 'Addr' })).to.be.true;
+      expect(res.json.calledWithMatch({ name: 'User', email: 'user@example.com', role: 'BUYER', id: 'userId', university: 'Uni', })).to.be.true;
     });
     it('should return 404 if user not found', async () => {
       const req = { user: { id: 'userId' } };
