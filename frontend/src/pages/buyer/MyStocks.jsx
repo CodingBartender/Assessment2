@@ -15,7 +15,9 @@ const MyStocks = () => {
         const userId = sessionStorage.getItem('user_id');
         if (!userId) return;
         try {
-            const res = await axiosInstance.get(`/api/order/getOrdersByUserId/${userId}`);
+            const res = await axiosInstance.get(`/api/order`, {
+                headers: { 'user_id': userId }
+            });
             setOrders(res.data);
         } catch {
             setOrders([]);
@@ -50,7 +52,7 @@ const MyStocks = () => {
             // Update wallet (add back money)
             const portfolioId = order.portfolio_id._id;
 
-            await axiosInstance.put(`/api/portfolio/update/${portfolioId}`, {
+            await axiosInstance.put(`/api/portfolio/${portfolioId}`, {
                 user_id: userId,
                 virtual_balance: (order.price * order.quantity) + order.portfolio_id.virtual_balance, // Add back
             });
