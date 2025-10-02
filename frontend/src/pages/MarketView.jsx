@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import axiosInstance from '../axiosConfig';
 import TaskList from '../components/TaskList';
 
-const ViewStock = () => {
+const MarketView = () => {
   const { user } = useAuth();
 
   // Owned Stock Overview 
@@ -78,38 +78,61 @@ const ViewStock = () => {
     };
   }, []);
 
-  // FR6: Live updates (SSE) — merge incoming stock updates into the list
+  // FR6: Live updates (SSE, relative URL) ----------------
   useEffect(() => {
-    const url = `${window.location.origin.replace(/\/+$/, '')}/api/market/stream`;
-    const es = new EventSource(url);
+    // REACT_APP_API_URL handles routing.
+    const base = (process.env.REACT_APP_API_URL || '').replace(/\/+$/, '');
+    const src = `${base}/api/market/stream`; 
+    const es = new EventSource(src);
 
     const mergeUpdate = (payload) => {
       setStocks((prev) => {
-        const map = new Map(prev.map((p) => [p._id || p.symbol, p]));
         const key = payload._id || payload.symbol;
-        const old = map.get(key) || {};
-        map.set(key, { ...old, ...payload }); // merge price/qty/updated, etc.
-        return Array.from(map.values());
+        let found = false;
+        const next = prev.map((p) => {
+          const k = p._id || p.symbol;
+          if (k === key) {
+            found = true;
+            return { ...p, ...payload };
+          }
+          return p;
+        });
+        return found ? next : next.concat(payload); //upsert in case a new stock arrives
       });
     };
 
-    es.addEventListener('stock.updated', (ev) => {
-      try { mergeUpdate(JSON.parse(ev.data)); } catch {}
-    });
-
-    es.addEventListener('stock.deleted', (ev) => {
+    const onUpdated = (e) => {
       try {
-        const { _id, symbol } = JSON.parse(ev.data);
+        const data = JSON.parse(e.data);
+        mergeUpdate(data);
+      } catch {}
+    };
+
+    const onDeleted = (e) => {
+      try {
+        const data = JSON.parse(e.data);
         setStocks((prev) =>
-          prev.filter((s) => (s._id && _id) ? s._id !== _id : s.symbol !== symbol)
+          prev.filter((s) =>
+            data._id ? s._id !== data._id : s.symbol !== data.symbol
+          )
         );
       } catch {}
-    });
+    };
 
-    es.onerror = () => { /* keep alive; browser auto-retries */ };
-    return () => es.close();
+    es.addEventListener('stock.updated', onUpdated);
+    es.addEventListener('stock.deleted', onDeleted);
+    es.onerror = () => {
+      /* keep connection; browser auto-retries SSE */
+    };
+
+    return () => {
+      es.removeEventListener('stock.updated', onUpdated);
+      es.removeEventListener('stock.deleted', onDeleted);
+      es.close();
+    };
   }, []);
 
+  // Derived list (filter/sort)
   const filtered = useMemo(() => {
     const needle = q.trim().toLowerCase();
     const base = needle
@@ -129,12 +152,13 @@ const ViewStock = () => {
         break;
       case 'updated':
         base.sort(
-          (a, b) => new Date(a.last_updated || 0) - new Date(b.last_updated || 0)
+          (a, b) =>
+            new Date(a.last_updated || 0) - new Date(b.last_updated || 0)
         );
         break;
       default:
         base.sort((a, b) =>
-          String(a.symbol).localeCompare(String(b.symbol))
+          String(a.symbol || '').localeCompare(String(b.symbol || ''))
         );
     }
     return base;
@@ -154,7 +178,7 @@ const ViewStock = () => {
     try {
       const { data } = await axiosInstance.get(`/api/stocks/${stock._id}/orders`);
       setOrders(Array.isArray(data) ? data : []);
-    } catch (_) {
+    } catch {
       setOrders([]);
     } finally {
       setOrdersLoading(false);
@@ -167,12 +191,13 @@ const ViewStock = () => {
     setOrders([]);
   };
 
+  // UI 
   return (
     <div className="container mx-auto p-6">
       {/* Market overview */}
       <h1 className="text-2xl font-bold">Market Overview</h1>
       <div className="tradingview-widget-container" ref={container}>
-        <div className="tradingview-widget-container__widget"></div>
+        <div className="tradingview-widget-container__widget" />
         <div className="tradingview-widget-copyright">
           <a
             href="https://www.tradingview.com/symbols/NASDAQ-AAPL/?exchange=NASDAQ"
@@ -215,7 +240,7 @@ const ViewStock = () => {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filtered.map((s) => (
-              <div key={s._id} className="border rounded p-4 shadow bg-white">
+              <div key={s._id || s.symbol} className="border rounded p-4 shadow bg-white">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="font-semibold text-lg">{s.symbol}</div>
@@ -230,16 +255,12 @@ const ViewStock = () => {
                     <div className="text-xl">
                       $ {Number(s.current_price).toFixed(2)}
                     </div>
-                    <div className="text-xs opacity-70">
-                      Qty: {Number(s.quantity)}
-                    </div>
+                    <div className="text-xs opacity-70">Qty: {Number(s.quantity)}</div>
                   </div>
                 </div>
                 <div className="text-xs opacity-70 mt-2">
                   Updated:{' '}
-                  {s.last_updated
-                    ? new Date(s.last_updated).toLocaleString()
-                    : '—'}
+                  {s.last_updated ? new Date(s.last_updated).toLocaleString() : '—'}
                 </div>
                 <div className="mt-3">
                   <button
@@ -291,9 +312,7 @@ const ViewStock = () => {
                     </div>
                     <div className="text-xs opacity-70">
                       Status: {o.status} • Placed:{' '}
-                      {o.created_at
-                        ? new Date(o.created_at).toLocaleString()
-                        : '—'}
+                      {o.created_at ? new Date(o.created_at).toLocaleString() : '—'}
                     </div>
                     {o.buyer_id?.name && (
                       <div className="text-xs opacity-70 mt-1">
@@ -313,4 +332,4 @@ const ViewStock = () => {
   );
 };
 
-export default ViewStock;
+export default MarketView;

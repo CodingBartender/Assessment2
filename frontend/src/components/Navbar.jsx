@@ -22,6 +22,7 @@ const Navbar = () => {
             {user.role === 'TRADER' && (
               <>
                 <Link to="/trader-dashboard/stock" className="font-bold mr-4">Stock</Link>
+                <Link to="/marketview" className="font-bold mr-4">Market View</Link>
                 <Link to="/trader-dashboard/transactions" className="font-bold mr-4">Transaction</Link>
               </>
             )}
