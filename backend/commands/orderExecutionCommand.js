@@ -1,7 +1,35 @@
-const buyOrderCommand = require("../commands/buyOrderCommand");
-const sellOrderCommand = require("../commands/sellOrderCommand");
-const validationHandler = require("../handler/concreteHandlers");
+const command = require("../commands/command");
+const states = require("../states/concreteStates");
 
-execute()
+class orderExecuteCommand extends command {
 
-undo()
+    constructor(order) {
+        // Call parent command constructor
+        super();
+        this.order = order;
+    };
+
+    async Execute() {
+
+        const pending = new states.pendingState(this.order);
+        await pending.Validate;
+
+        const validate = new states.validatedState(this.order);
+        await validate.Execute();
+
+        const execute = new states.executedState(this.order);
+        await execute.Execute();
+
+        return this.order;
+
+    };
+
+    async Undo() {
+
+        const cancel = new states.cancelledState(this.order);
+        await cancel.Cancel();
+
+        return this.order;
+
+    };
+};

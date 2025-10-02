@@ -2,10 +2,11 @@ const validationHandler = require("../handler/concreteHandlers");
 const buyOrderCommand = require("../commands/buyOrderCommand");
 const sellOrderCommand = require("../commands/sellOrderCommand");
 const state = require("../states/baseState");
+const portfolioRepo = require("../repository/portfolioRepositry");
 
 class pendingState extends state {
 
-    async validate() {
+    async Validate() {
 
         if (this.order.status !== 'Pending') {
             throw new Error ("This order must be pending to validate it's contents");
@@ -38,7 +39,7 @@ class pendingState extends state {
 
 class validatedState extends state {
 
-    async execute() {
+    async Execute() {
 
         if (this.order.status !== 'Validated') {
             throw new Error ("Order must be validated!");
@@ -58,12 +59,10 @@ class validatedState extends state {
 
 };
 
-const portfolioRepo = require("../repository/portfolioRepositry");
-
 
 class executedState extends state {
     
-    async execute() {
+    async Execute() {
 
         if (this.order.status !== 'Executed') {
             throw new Error ("Order must be executed!");
@@ -83,7 +82,7 @@ class executedState extends state {
 
 class cancelledState extends state {
 
-    async cancel() {
+    async Cancel() {
 
         if (this.order.status !== 'Cancelled') {
             throw new Error ("Order must be cancelled!");
