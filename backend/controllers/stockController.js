@@ -1,7 +1,7 @@
 // controllers/stockController.js
 const stockRepo = require('../repository/stockRepository');
 const EventHub = require('../observer/EventHub'); 
-const { getPricingStrategy } = require('../strategy/PricingStrategy');
+const pricing = require('../strategy/PricingStrategy');
 const fs = require('fs');
 const path = require('path');
 
@@ -12,7 +12,7 @@ exports.createStock = async (req, res) => {
       stockData.logo = `/uploads/${req.file.filename}`;
     }
     
-    const strategy = getPricingStrategy();
+    const strategy = pricing.getPricingStrategy();
     const nextPrice = strategy.compute({
       current: Number(req.body.current_price),
       signal: Number(req.body.current_price), // Trader’s intended price
@@ -63,7 +63,7 @@ exports.updateStock = async (req, res) => {
       updateData.logo = `/uploads/${req.file.filename}`;
     }
     
-    const strategy = getPricingStrategy();
+    const strategy = pricing.getPricingStrategy();
     const changes = { ...req.body };
 
     if (req.body.current_price !== undefined) {
