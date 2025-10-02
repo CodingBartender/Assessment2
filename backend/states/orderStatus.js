@@ -1,8 +1,6 @@
 //FR 10 - OrderStatus
 
 
-
-
 // Abstraction - OrderState as base class
 class OrderState {
   constructor(order) { 
