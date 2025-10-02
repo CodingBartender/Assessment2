@@ -18,10 +18,12 @@ const Login = () => {
         userData.role = userData.type;
       }
       login(userData);
-      if (userData.role === 'TRADER') {
-        navigate('/trader-dashboard');
+            if (userData.role === "ADMIN") {
+        navigate("/admin-dashboard");
+      } else if (userData.role === "TRADER") {
+        navigate("/trader-dashboard");
       } else {
-        navigate('/profile');
+        navigate("/profile"); // Buyer
       }
     } catch (error) {
       alert('Login failed. Please try again.');

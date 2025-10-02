@@ -11,6 +11,7 @@ import TrradeHistory from './pages/trader_dashboard/TraderTransactions';
 import Portfolio from './pages/buyer/Portfolio';
 import Transaction from './pages/buyer/Transaction';
 import MarketView from './pages/MarketView';
+import DashboardAdmin from './pages/admin/dashboard';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/trader-dashboard/transactions" element={<TrradeHistory />} />
         <Route path="/buyer/portfolio" element={<Portfolio />} />
         <Route path="/buyer/transactions" element={<Transaction />} />
+        <Route path="/admin-dashboard" element={<DashboardAdmin />} />
       </Routes>
     </Router>
   );
