@@ -1,6 +1,6 @@
 const handler = require('../handler/baseHandler');
 // const orderRepo = require('../repository/orderRepository');
-const orderDB = require('../models/Order');
+// const orderDB = require('../models/Order');
 const user = require('../models/User');
 const portfolio = require('../models/Portfolio');
 const stock = require('../models/Stock');
@@ -18,7 +18,7 @@ class buyer_idValidate extends handler {
         if (!userId) {
             throw new Error ('Buyer_id is incorrect!');
         };
-        // Continue to next in chain!
+        // Continue to next in chain
         return super.handle(request);
     };
 };
