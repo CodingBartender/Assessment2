@@ -119,45 +119,6 @@ const DashboardAdmin = () => {
 <section style={{ background: '#fff', padding: '1.5rem', borderRadius: 8, boxShadow: '0 2px 8px #e5e7eb' }}>
   <h3 style={{ marginBottom: '1rem', fontSize: '1.2em', fontWeight: 600, color: '#2563eb' }}>Manage Stocks</h3>
 
-  {/* Create Stock Form */}
-  <form 
-    onSubmit={handleCreateStock} 
-    style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem', flexWrap: 'wrap' }}
-  >
-    <input 
-      placeholder="Symbol" 
-      value={newStock.symbol} 
-      onChange={e => setNewStock({ ...newStock, symbol: e.target.value })}
-      style={{ flex: 1, padding: '0.5rem' }} 
-    />
-    <input 
-      placeholder="Company" 
-      value={newStock.company_name} 
-      onChange={e => setNewStock({ ...newStock, company_name: e.target.value })}
-      style={{ flex: 2, padding: '0.5rem' }} 
-    />
-    <input 
-      placeholder="Price" 
-      type="number" 
-      value={newStock.current_price} 
-      onChange={e => setNewStock({ ...newStock, current_price: e.target.value })}
-      style={{ flex: 1, padding: '0.5rem' }} 
-    />
-    <input 
-      placeholder="Quantity" 
-      type="number" 
-      value={newStock.quantity} 
-      onChange={e => setNewStock({ ...newStock, quantity: e.target.value })}
-      style={{ flex: 1, padding: '0.5rem' }} 
-    />
-    <button 
-      type="submit" 
-      style={{ padding: '0.5rem 1rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: 4 }}
-    >
-      Add Stock
-    </button>
-  </form>
-
   {/* Stocks Table */}
   <table style={{ width: '100%', borderCollapse: 'collapse' }}>
     <thead>
