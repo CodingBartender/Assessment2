@@ -23,11 +23,6 @@ class AdminController {
     return await User.create({ name, email, password, role });
   }
 
-  async createStock(stockData) {
-
-    // Factory - builds a Stock object from params
-    return await Stock.create(stockData);
-  }
 
   // user management 
   async getAllUsers() {
