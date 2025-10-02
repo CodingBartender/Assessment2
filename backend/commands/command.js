@@ -1,11 +1,11 @@
 class Command {
 
     async Execute() {
-        throw new error('Execute() method must be used!')
+        throw new Error ('Execute() method must be used!')
     };
 
     async Undo() {
-        throw new error('Undo() method must be used!')
+        throw new Error ('Undo() method must be used!')
     };
 
 };

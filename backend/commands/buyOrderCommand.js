@@ -4,22 +4,21 @@ const command = require('../commands/command');
 class buyOrderCommand extends command {
 
     // Store data from repo 
-    constructor(orderData) {
+    constructor(order) {
 
-        this.orderData = orderData;
+        this.order = order;
 
     };
 
-    // Use stored data and return order 
     async Execute() {
 
+
         // Accessing stored data 
-        const orderExecute = await accessOrderRepo.createOrder(this.orderData)
+        const orderExecute = await accessOrderRepo.createOrder(this.order);
         
         // Need to access cancelOrder(orderId, userId) parametres -> access through orderExecute 
-        this.accessIds = orderExecute
-
-        return orderExecute
+        this.accessIds = orderExecute;
+        return orderExecute;
         
     };
 
