@@ -19,7 +19,7 @@ const DashboardAdmin = () => {
 
   useEffect(() => { loadAll(); }, []);
 
-  // -------- Users --------
+  // function to manage users
   const handleCreateUser = async (e) => {
     e.preventDefault();
     await adminAPI.createUser(newUser);
@@ -32,7 +32,7 @@ const DashboardAdmin = () => {
     loadAll();
   };
 
-  // -------- Stocks --------
+  // function to manange stock
   const handleDeleteStock = async (id) => {
     await adminAPI.deleteStock(id);
     loadAll();
@@ -43,15 +43,15 @@ const DashboardAdmin = () => {
   <h1 style={{ 
     color: '#2563eb', 
     marginBottom: '1rem',
-    fontSize: '2rem',           // larger, real page title size
-    fontWeight: 700,            // bold
-    paddingBottom: '0.5rem'     // space between text and line
+    fontSize: '2rem',           
+    fontWeight: 700,            
+    paddingBottom: '0.5rem'     
   }}>
     Admin Dashboard
   </h1>
 
 
-      {/* ---------------- Users ---------------- */}
+      {/* user section */}
       <section style={{
         background: '#fff',
         padding: '1.5rem',
@@ -68,7 +68,7 @@ const DashboardAdmin = () => {
         }}>Manage Users</h3>
 
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-          {/* Left: Users Table */}
+          {/* user table */}
           <div style={{ flex: 2 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
@@ -113,7 +113,7 @@ const DashboardAdmin = () => {
             </table>
           </div>
 
-          {/* Right: Create User Form */}
+          {/* register new user form */}
           <div style={{
             flex: 1,
             background: "#f9f9f6ff",
@@ -133,7 +133,7 @@ const DashboardAdmin = () => {
   onSubmit={handleCreateUser} 
   style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
 >
-  {/* Name Field */}
+  
   <div style={{ display: "flex", flexDirection: "column" }}>
     <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Name</label>
     <input 
@@ -154,7 +154,7 @@ const DashboardAdmin = () => {
     />
   </div>
 
-  {/* Email Field */}
+ 
   <div style={{ display: "flex", flexDirection: "column" }}>
     <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Email</label>
     <input 
@@ -175,7 +175,7 @@ const DashboardAdmin = () => {
     />
   </div>
 
-  {/* Password Field */}
+ 
   <div style={{ display: "flex", flexDirection: "column" }}>
     <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Password</label>
     <input 
@@ -196,7 +196,7 @@ const DashboardAdmin = () => {
     />
   </div>
 
-  {/* Role Dropdown */}
+ 
   <div style={{ display: "flex", flexDirection: "column" }}>
     <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Role</label>
     <select 
@@ -216,7 +216,7 @@ const DashboardAdmin = () => {
     </select>
   </div>
 
-  {/* Submit Button */}
+  
   <button 
     type="submit" 
     style={{ 
@@ -241,7 +241,7 @@ const DashboardAdmin = () => {
         </div>
       </section>
 
-      {/* ---------------- Stocks ---------------- */}
+      {/*  Stocks section */}
       <section style={{
         background: '#fff',
         padding: '1.5rem',
@@ -258,7 +258,7 @@ const DashboardAdmin = () => {
         }}>Manage Stocks</h3>
 
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-          {/* Left: Stocks Table */}
+          {/*  Stocks Table */}
           <div style={{ flex: 2 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
