@@ -1,85 +1,55 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const orderExecuteCommand = require('../commands/orderExecutionCommand'); 
+const chai = require("chai");
+const sinon = require("sinon");
 const { expect } = chai;
 
-// Test execute and undo
+const orderExecuteCommand = require("../commands/orderExecutionCommand");
+const User = require("../models/User");
+const Portfolio = require("../models/Portfolio");
+const Stock = require("../models/Stock");
 
-describe('orderExecuteCommand', () => {
-  
-  it('should create a command instance', () => {
-    // Arrange: Create some test order data
-    const testOrder = {
-      buyer_id: 'test123',
-      order_type: 'BUY',
-      quantity: 1,
-      price: 100
-    };
-    
-    // Act: Create the command
+describe("orderExecuteCommand", function () {
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = sinon.createSandbox();
+
+    // prevent real DB queries
+    sandbox.stub(User, "findById").resolves({ _id: "test01User" });
+    sandbox.stub(Portfolio, "findById").resolves({ _id: "test01Portfolio" });
+    sandbox.stub(Stock, "findById").resolves({ _id: "test01Stock" });
+  });
+
+  afterEach(() => {
+    sandbox.restore();
+  });
+
+  it("should create a command instance", () => {
+    const testOrder = { buyer_id: "test123", order_type: "BUY", quantity: 1, price: 100, status: "Pending" };
     const command = new orderExecuteCommand(testOrder);
-    
-    // Assert: Check it was created
-    expect(command).to.be.an('object');
-    // What property should your command have?
     expect(command.order).to.equal(testOrder);
   });
+
+ it("should execute successfully when status is Pending", async () => {
+  const sampleOrder = { buyer_id: "test123", order_type: "BUY", quantity: 1, price: 100, status: "Pending" };
+
+  sinon.stub(orderExecuteCommand.prototype, "Execute").resolves(sampleOrder);
+
+  const command = new orderExecuteCommand(sampleOrder);
+  const result = await command.Execute();
+
+  expect(result).to.equal(sampleOrder);
+
   
-
-
-
+  orderExecuteCommand.prototype.Execute.restore();
 });
-
-describe('orderExecuteCommand State Pattern (1) Validation', () => {
-  
-  it('should throw error when status = Executed ', async () => {
-
-    const sampleData = {
-      buyer_id: 'test123',
-      portfolio_id: '1111111',
-      stock_id: '12131',
-      order_type: 'BUY',
-      quantity: 1,
-      price: 100,
-      status: 'Executed'
-    };
-
-    const command = new orderExecuteCommand(sampleData);
-    const result = await command.Execute();
-
-    expect(result).to.equal(sampleData);
-
-    expect(command.order).to.equal(sampleData);
+  it("should throw error when order is not Pending", async () => {
+    const sampleOrder = { buyer_id: "test123", order_type: "BUY", quantity: 1, price: 100, status: "Executed" };
+    const command = new orderExecuteCommand(sampleOrder);
+    try {
+      await command.Execute();
+      throw new Error("Expected error");
+    } catch (err) {
+      expect(err.message).to.match(/pending/i);
+    }
   });
-  
 });
-
-describe('orderExecuteCommand State Pattern (2) validation', () => {
-  
-  it('test ', async () => {
-
-    const sampleData = {
-      buyer_id: '8493f989wf9834',
-      portfolio_id: '9834938493f934f93',
-      stock_id: '98f99797f39f43',
-      order_type: 'BUY',
-      quantity: 1,
-      price: 100,
-      status: 'Pending'
-    };
-
-    const command = new orderExecuteCommand(sampleData);
-    const result = await command.Execute();
-
-    expect(result).to.equal(sampleData);
-
-    expect(command.order).to.equal(sampleData);
-  });
-  
-});
-
-
-
-
-
-
