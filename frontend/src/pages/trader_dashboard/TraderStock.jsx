@@ -46,6 +46,7 @@ const TraderStock = () => {
     }
   };
 
+
   return (
     <div className="trader-stock-page">
       <div className="stock-chart">

@@ -10,12 +10,13 @@
     "prod": "node server.js"
   },
   "dependencies": {
+    "all": "^0.0.0",
     "bcrypt": "^5.0.1",
     "chai": "^4.5.0",
     "chai-http": "^4.3.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
-    "express": "^4.17.1",
+    "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.0.14",
     "multer": "^2.0.2",
