@@ -14,9 +14,9 @@ describe("orderExecuteCommand", function () {
     sandbox = sinon.createSandbox();
 
     // prevent real DB queries
-    sandbox.stub(User, "findById").resolves({ _id: "test01User" });
-    sandbox.stub(Portfolio, "findById").resolves({ _id: "test01Portfolio" });
-    sandbox.stub(Stock, "findById").resolves({ _id: "test01Stock" });
+    sandbox.stub(User, "findById").resolves({ _id: "testOrderUser" });
+    sandbox.stub(Portfolio, "findById").resolves({ _id: "testOrderPortfolio" });
+    sandbox.stub(Stock, "findById").resolves({ _id: "testOrderStock" });
   });
 
   afterEach(() => {
