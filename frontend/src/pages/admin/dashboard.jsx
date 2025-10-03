@@ -33,42 +33,76 @@ const DashboardAdmin = () => {
   };
 
   // -------- Stocks --------
-  
   const handleDeleteStock = async (id) => {
     await adminAPI.deleteStock(id);
     loadAll();
   };
 
   return (
-    <div style={{ padding: '2rem', display: 'grid', gap: '2rem' }}>
-      <h2 style={{ color: '#2563eb' }}>Admin Dashboard</h2>
+    <div style={{ padding: '2rem', display: 'grid', gap: '2.5rem' }}>
+  <h1 style={{ 
+    color: '#2563eb', 
+    marginBottom: '1rem',
+    fontSize: '2rem',           // larger, real page title size
+    fontWeight: 700,            // bold
+    paddingBottom: '0.5rem'     // space between text and line
+  }}>
+    Admin Dashboard
+  </h1>
+
 
       {/* ---------------- Users ---------------- */}
-      <section style={{ background: '#fff', padding: '1.5rem', borderRadius: 8, boxShadow: '0 2px 8px #e5e7eb' }}>
-        <h3 style={{ marginBottom: '1rem', fontSize: '1.2em', fontWeight: 600, color: '#2563eb' }}>Manage Users</h3>
+      <section style={{
+        background: '#fff',
+        padding: '1.5rem',
+        borderRadius: 10,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        border: '1px solid #0c0c0cff',
+        borderTop: '6px solid #2563eb'
+      }}>
+        <h3 style={{
+          marginBottom: '1rem',
+          fontSize: '1.2em',
+          fontWeight: 600,
+          color: '#111827'
+        }}>Manage Users</h3>
 
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
           {/* Left: Users Table */}
           <div style={{ flex: 2 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ background: '#f0f6ff', color: '#2563eb', textAlign: 'left' }}>
-                  <th style={{ padding: '0.75rem' }}>Name</th>
-                  <th style={{ padding: '0.75rem' }}>Email</th>
-                  <th style={{ padding: '0.75rem' }}>Role</th>
+                <tr style={{ background: '#2563eb', color: '#fff' }}>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Name</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Email</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Role</th>
                   <th style={{ padding: '0.75rem', textAlign: 'center' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {users.map(u => (
-                  <tr key={u._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                {users.map((u, index) => (
+                  <tr
+                    key={u._id}
+                    style={{
+                      background: index % 2 === 0 ? '#fff' : '#f9fafb',
+                      borderBottom: '1px solid #d2d2d6ff',
+                      cursor: 'pointer'
+                    }}
+                  >
                     <td style={{ padding: '0.75rem' }}>{u.name}</td>
                     <td style={{ padding: '0.75rem' }}>{u.email}</td>
                     <td style={{ padding: '0.75rem' }}>{u.role}</td>
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
-                      <button 
-                        onClick={() => handleDeleteUser(u._id)} 
-                        style={{ color: '#dc2626', border: '1px solid #dc2626', padding: '0.25rem 0.75rem', borderRadius: 4, background: 'white', cursor: 'pointer' }}
+                      <button
+                        onClick={() => handleDeleteUser(u._id)}
+                        style={{
+                          color: '#eceaeaff',
+                          border: '1px solid #dc2626',
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: 4,
+                          background: '#c11616ff',
+                          cursor: 'pointer'
+                        }}
                       >
                         Delete
                       </button>
@@ -79,42 +113,156 @@ const DashboardAdmin = () => {
             </table>
           </div>
 
-       
+          {/* Right: Create User Form */}
           <div style={{
             flex: 1,
-            background: "#f9fafb",
-            border: "1px solid #e5e7eb",
-            borderRadius: "8px",
+            background: "#f9f9f6ff",
+            border: "1px solid #161718ff",
+            borderRadius: "10px",
             padding: "1.5rem",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+            boxShadow: "2 4px 6px rgba(0,0,0,0.05)",
             minWidth: "300px"
           }}>
-           <h3 style={{ marginBottom: '1rem', fontSize: '1.2em', fontWeight: 600, color: '#2563eb' }}>Create User</h3>
-            <form onSubmit={handleCreateUser} style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <input placeholder="Name" value={newUser.name} onChange={e => setNewUser({ ...newUser, name: e.target.value })} />
-              <input placeholder="Email" value={newUser.email} onChange={e => setNewUser({ ...newUser, email: e.target.value })} />
-              <input type="password" placeholder="Password" value={newUser.password} onChange={e => setNewUser({ ...newUser, password: e.target.value })} />
-              <select value={newUser.role} onChange={e => setNewUser({ ...newUser, role: e.target.value })}>
-                <option>BUYER</option>
-                <option>TRADER</option>
-                <option>ADMIN</option>
-              </select>
-              <button type="submit" style={{ padding: "0.5rem 1rem", background: "#2563eb", color: "#fff", border: "none", borderRadius: 4 }}>Create</button>
-            </form>
+             <h3 style={{
+          marginBottom: '1rem',
+          fontSize: '1.2em',
+          fontWeight: 600,
+          color: '#111827'
+        }}>Create User</h3>
+           <form 
+  onSubmit={handleCreateUser} 
+  style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+>
+  {/* Name Field */}
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Name</label>
+    <input 
+      type="text"
+      placeholder="Enter full name"
+      value={newUser.name} 
+      onChange={e => setNewUser({ ...newUser, name: e.target.value })} 
+      autoComplete="off"
+      style={{
+        padding: "0.6rem",
+        border: "1px solid #d1d5db",
+        borderRadius: 6,
+        outline: "none",
+        fontSize: "0.95rem",
+      }}
+      onFocus={e => e.target.style.border = "1px solid #2563eb"}
+      onBlur={e => e.target.style.border = "1px solid #d1d5db"}
+    />
+  </div>
+
+  {/* Email Field */}
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Email</label>
+    <input 
+      type="email"
+      placeholder="Enter email"
+      value={newUser.email} 
+      onChange={e => setNewUser({ ...newUser, email: e.target.value })} 
+      autoComplete="off"
+      style={{
+        padding: "0.6rem",
+        border: "1px solid #d1d5db",
+        borderRadius: 6,
+        outline: "none",
+        fontSize: "0.95rem"
+      }}
+      onFocus={e => e.target.style.border = "1px solid #2563eb"}
+      onBlur={e => e.target.style.border = "1px solid #d1d5db"}
+    />
+  </div>
+
+  {/* Password Field */}
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Password</label>
+    <input 
+      type="password"
+      placeholder="Enter password"
+      value={newUser.password} 
+      onChange={e => setNewUser({ ...newUser, password: e.target.value })} 
+      autoComplete="new-password"
+      style={{
+        padding: "0.6rem",
+        border: "1px solid #d1d5db",
+        borderRadius: 6,
+        outline: "none",
+        fontSize: "0.95rem"
+      }}
+      onFocus={e => e.target.style.border = "1px solid #2563eb"}
+      onBlur={e => e.target.style.border = "1px solid #d1d5db"}
+    />
+  </div>
+
+  {/* Role Dropdown */}
+  <div style={{ display: "flex", flexDirection: "column" }}>
+    <label style={{ marginBottom: "0.3rem", fontWeight: 500, color: "#374151" }}>Role</label>
+    <select 
+      value={newUser.role} 
+      onChange={e => setNewUser({ ...newUser, role: e.target.value })}
+      style={{
+        padding: "0.6rem",
+        border: "1px solid #d1d5db",
+        borderRadius: 6,
+        fontSize: "0.95rem",
+        background: "#fff"
+      }}
+    >
+      <option>BUYER</option>
+      <option>TRADER</option>
+      <option>ADMIN</option>
+    </select>
+  </div>
+
+  {/* Submit Button */}
+  <button 
+    type="submit" 
+    style={{ 
+      padding: "0.7rem", 
+      background: "#0e8f27", 
+      color: "#fff", 
+      border: "none", 
+      borderRadius: 6, 
+      fontSize: "1rem",
+      fontWeight: 600,
+      cursor: "pointer",
+      transition: "background 0.3s"
+    }}
+    onMouseEnter={e => e.target.style.background = "#0b6d1f"}
+    onMouseLeave={e => e.target.style.background = "#0e8f27"}
+  >
+    Create User
+  </button>
+</form>
+
           </div>
         </div>
       </section>
 
-      
-      <section style={{ background: '#fff', padding: '1.5rem', borderRadius: 8, boxShadow: '0 2px 8px #e5e7eb' }}>
-        <h3 style={{ marginBottom: '1rem', fontSize: '1.2em', fontWeight: 600, color: '#2563eb' }}>Manage Stocks</h3>
+      {/* ---------------- Stocks ---------------- */}
+      <section style={{
+        background: '#fff',
+        padding: '1.5rem',
+        borderRadius: 10,
+        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+        border: '1px solid #111112ff',
+        borderTop: '6px solid #2563eb'
+      }}>
+        <h3 style={{
+          marginBottom: '1rem',
+          fontSize: '1.2em',
+          fontWeight: 600,
+          color: '#111827'
+        }}>Manage Stocks</h3>
 
         <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-        
+          {/* Left: Stocks Table */}
           <div style={{ flex: 2 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
-                <tr style={{ background: '#f0f6ff', color: '#2563eb', textAlign: 'left' }}>
+                <tr style={{ background: '#2563eb', color: '#fff' }}>
                   <th style={{ padding: '0.75rem' }}>Symbol</th>
                   <th style={{ padding: '0.75rem' }}>Company</th>
                   <th style={{ padding: '0.75rem' }}>Price</th>
@@ -125,8 +273,15 @@ const DashboardAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {stocks.map(s => (
-                  <tr key={s._id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                {stocks.map((s, index) => (
+                  <tr
+                    key={s._id}
+                    style={{
+                      background: index % 2 === 0 ? '#fff' : '#f9fafb',
+                      borderBottom: '1px solid #e5e7eb',
+                      cursor: 'pointer'
+                    }}
+                  >
                     <td style={{ padding: '0.75rem' }}>{s.symbol}</td>
                     <td style={{ padding: '0.75rem' }}>{s.company_name}</td>
                     <td style={{ padding: '0.75rem' }}>${s.current_price}</td>
@@ -134,9 +289,16 @@ const DashboardAdmin = () => {
                     <td style={{ padding: '0.75rem' }}>{s.type}</td>
                     <td style={{ padding: '0.75rem' }}>{s.trader_id}</td>
                     <td style={{ padding: '0.75rem', textAlign: 'center' }}>
-                      <button 
-                        onClick={() => handleDeleteStock(s._id)} 
-                        style={{ color: '#dc2626', border: '1px solid #dc2626', padding: '0.25rem 0.75rem', borderRadius: 4, background: 'white', cursor: 'pointer' }}
+                      <button
+                        onClick={() => handleDeleteStock(s._id)}
+                        style={{
+                          color: '#dc2626',
+                          border: '1px solid #dc2626',
+                          padding: '0.25rem 0.75rem',
+                          borderRadius: 4,
+                          background: '#fff',
+                          cursor: 'pointer'
+                        }}
                       >
                         Delete
                       </button>
@@ -146,7 +308,6 @@ const DashboardAdmin = () => {
               </tbody>
             </table>
           </div>
-
         </div>
       </section>
     </div>
