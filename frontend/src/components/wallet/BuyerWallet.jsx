@@ -19,7 +19,7 @@ const BuyerWallet = () => {
     try {
       // Get portfolio (assume only one per buyer)
       const userId = sessionStorage.getItem('user_id');
-      const resPortfolio = await axiosInstance.get(`/api/portfolio/getAllByUserId`, {
+      const resPortfolio = await axiosInstance.get(`/api/portfolio`, {
         params: { user_id: userId }
       });
       const portfolioData = resPortfolio.data[0] || resPortfolio.data;
@@ -27,7 +27,7 @@ const BuyerWallet = () => {
 
       // Get buy/sold stats and profit
       const buyerId = portfolioData?.buyer_id;
-      const resOrders = await axiosInstance.get(`/api/order/totalQuantity/${buyerId}`);
+      const resOrders = await axiosInstance.get(`/api/order/${buyerId}`);
       console.log(resOrders)
       setBuyCount(resOrders.data.totalQuantity || 0);
       //setSoldCount(resOrders.data.soldCount || 0);
@@ -59,7 +59,7 @@ const BuyerWallet = () => {
     try {
       if (!portfolio) {
         // No portfolio, create one
-        await axiosInstance.post('/api/portfolio/addPortfolio', {
+        await axiosInstance.post('/api/portfolio', {
           user_id: userId,
           virtual_balance: Number(updateAmount)
         });
@@ -72,7 +72,7 @@ const BuyerWallet = () => {
           return;
         }
         // Portfolio exists, update
-        await axiosInstance.put(`/api/portfolio/update/${portfolio._id}`, {
+        await axiosInstance.put(`/api/portfolio/${portfolio._id}`, {
           user_id: userId,
           virtual_balance: Number(updateAmount) + Number(portfolio.virtual_balance)
         });
@@ -93,7 +93,7 @@ const BuyerWallet = () => {
         <div className="wallet-tile">
           <div className="tile-icon"><FaWallet size={28} color="#2563eb" /></div>
           <div className="tile-label">Available Balance</div>
-          <div className="tile-value">$ {portfolio?.virtual_balance ?? '--'}</div>
+          <div className="tile-value">$ {portfolio && portfolio.virtual_balance ? parseFloat(portfolio.virtual_balance).toFixed(2) : '--'}</div>
         </div>
         <div className="wallet-tile">
           <div className="tile-icon"><FaShoppingCart size={28} color="#2563eb" /></div>
@@ -108,7 +108,7 @@ const BuyerWallet = () => {
         <div className="wallet-tile">
           <div className="tile-icon"><FaChartLine size={28} color="#2563eb" /></div>
           <div className="tile-label">Total Profit</div>
-          <div className="tile-value">$ {profit}</div>
+          <div className="tile-value">$ {parseFloat(profit).toFixed(2)}</div>
         </div>
       </div>
       <div className="update-wallet-form-wrapper">

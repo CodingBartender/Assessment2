@@ -27,7 +27,7 @@ const ViewStocks = () => {
             const userId = sessionStorage.getItem('user_id');
             if (!userId) return;
             try {
-                const res = await axiosInstance.get(`/api/portfolio/getAllByUserId`, {
+                const res = await axiosInstance.get(`/api/portfolio`, {
                     params: { user_id: userId }
                 });
                 setWallet(res.data[0] || res.data);
@@ -70,7 +70,7 @@ const ViewStocks = () => {
         try {
             // Create order (pending)
             const userId = sessionStorage.getItem('user_id');
-            const orderRes = await axiosInstance.post('/api/order/create', {
+            const orderRes = await axiosInstance.post('/api/order', {
                 buyer_id: userId,
                 portfolio_id: wallet._id,
                 stock_id: buyModal.stock._id,
