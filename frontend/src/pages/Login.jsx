@@ -18,6 +18,8 @@ const Login = () => {
         userData.role = userData.type;
       }
       login(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+
             if (userData.role === "ADMIN") {
         navigate("/admin-dashboard");
       } else if (userData.role === "TRADER") {

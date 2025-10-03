@@ -1,13 +1,21 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState,useEffect, useContext } from 'react';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const saved = localStorage.getItem("user");
+    if (saved) {
+      setUser(JSON.parse(saved));
+    }
+  }, []);
+
   const login = (userData) => {
     setUser(userData);
     // Save user info to sessionStorage
+    localStorage.setItem("user", JSON.stringify(userData));
     if (userData) {
       sessionStorage.setItem('user_id', userData.id || userData._id || '');
       sessionStorage.setItem('user_role', userData.role || '');

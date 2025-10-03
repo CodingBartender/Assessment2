@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -15,6 +16,7 @@ import DashboardAdmin from './pages/admin/dashboard';
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Navbar />
       <Routes>
@@ -32,6 +34,7 @@ function App() {
         <Route path="/admin-dashboard" element={<DashboardAdmin />} />
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 
