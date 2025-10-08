@@ -13,7 +13,8 @@
 * Sell stocks
 * Compare stocks
 
-** public URL : http://52.64.227.102:3000 **
+** public URL : http://54.252.244.154 **
+** however make sure the public URL is commented out and the localhost URL is uncommented as the EC2 instance is no longer running **
 
 ** Instructions **
 
@@ -33,9 +34,18 @@
 
 ** Sample Login Credentials **
 
-* (Not necessary unless you don't want to create you're own account)
-* Username : test1
-* Email : test1@gmail  
-* Password : test1
+Admin
+* Username : admin9
+* Email : admin9@gmail.com
+* Password : admin9
 
-** Jira Link : https://connect-team-z167ygb8.atlassian.net/jira/software/projects/SMSA/summary?atlOrigin=eyJpIjoiMzhjZDNhMzY5NDUxNDY1NmJkZmNmMDkzMDVmOTJiZjAiLCJwIjoiaiJ9 **
+* Buyer
+* Username : buyer
+* Email : buyer@gmail.com
+* Password : buyer
+
+* Trader
+* Username : trader
+* Email : trader@gmail.com
+* Password : trader
+
